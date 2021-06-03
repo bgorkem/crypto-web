@@ -1,0 +1,14 @@
+{
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaVersion": 2018,
+    "sourceType": "module"
+
+  },
+
+  "ignorePatterns": ["webpack.config.js"],
+  "extends": ["plugin:@typescript-eslint/recommended"],
+  "rules": {
+  }
+}
+
