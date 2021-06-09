@@ -1,14 +1,12 @@
-import React, { useState } from "react";
+import React from 'react';
+import SocketConsole from './SocketConsole';
 
-const AppComponent = (): React.ReactElement => {
-  const [count, setCount] = useState(0);
-  return (
-    <>
-      <div data-testid="header">This is the count: {count}</div>
-      <button onClick={()=>setCount(count+1)} data-testid="button">Press Now</button>
-      <a href="http://www.bbc.com" data-testid="link">Link to BBC</a>
-    </>
-  );
+interface AppComponentType {
+  (): React.ReactElement;
+}
+
+const AppComponent: AppComponentType = () => {
+  return <SocketConsole />;
 };
 
 export default AppComponent;
