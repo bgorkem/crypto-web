@@ -1,4 +1,5 @@
 import React from 'react';
+import Grid from './Grid';
 import SocketConsole from './SocketConsole';
 
 interface AppComponentType {
@@ -6,7 +7,12 @@ interface AppComponentType {
 }
 
 const AppComponent: AppComponentType = () => {
-  return <SocketConsole />;
+  return (
+    <>
+      <SocketConsole />
+      <Grid />
+    </>
+  );
 };
 
 export default AppComponent;
