@@ -2,13 +2,16 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2018,
-    "sourceType": "module"
-
+    "sourceType": "module",
+    "project": "tsconfig.eslint.json"
   },
-
-  "ignorePatterns": ["webpack.config.js"],
-  "extends": ["plugin:@typescript-eslint/recommended"],
+  "ignorePatterns": [
+    "webpack.config.js"
+  ],
+  "extends": [
+    "plugin:@typescript-eslint/recommended"
+  ],
   "rules": {
+    "@typescript-eslint/explicit-module-boundary-types": 0
   }
 }
-

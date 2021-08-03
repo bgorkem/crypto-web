@@ -1,15 +1,15 @@
+import { PriceEntity } from '../types';
 import { SessionEventCode, SolclientFactory } from 'solclientjs';
 import config from './config';
-
-export function myAdder(x: number, y: number): number {
-  return x + y;
-}
 
 /**
  * Connects to Solace PubSub+ on Web, subscribes to prices topic
  * @param logger logging callback
  */
-export function connect(log: (message: string) => void): void {
+export function connect(
+  log: (message: string) => void,
+  onPriceUpdate: (prices: PriceEntity[]) => void
+): void {
   SolclientFactory.init({});
   log('initialized');
 
@@ -28,6 +28,9 @@ export function connect(log: (message: string) => void): void {
 
   subscriber.on(SessionEventCode.MESSAGE, function (message) {
     const m = message.getSdtContainer().getValue() || '';
+    const tick = JSON.parse(m);
+    const { id, currency, symbol, price, price_timestamp } = tick;
+    onPriceUpdate([{ id, currency, symbol, price, price_timestamp }]);
     log('Received message:' + m);
   });
 

@@ -1,12 +1,13 @@
 import React from 'react';
-import AppComponent from './AppComponent';
+import AppComponent from './components/AppComponent';
 import ReactDOM from 'react-dom';
 
-
-
 const App = () => {
-  return <div><AppComponent/></div>;
-  
+  return (
+    <div>
+      <AppComponent />
+    </div>
+  );
 };
 
 ReactDOM.render(<App />, document.querySelector('#root'));

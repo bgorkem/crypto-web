@@ -1,7 +1,13 @@
 import React, { ReactElement, useState } from 'react';
-import { connect } from './library';
+import { connect } from '../lib/socket';
+import { PriceEntity } from '../types';
 
-function SocketConsole(): ReactElement {
+type SocketConsoleProps = {
+  onPriceUpdate: (rows: PriceEntity[]) => void;
+  onConnect?: () => void;
+};
+
+function SocketConsole(props: SocketConsoleProps): ReactElement {
   const [logOutput, setLogOutput] = useState<string>('');
 
   const logger = (message: string) => {
@@ -10,7 +16,10 @@ function SocketConsole(): ReactElement {
 
   return (
     <div data-testid="socket-console">
-      <button onClick={() => connect(logger)} data-testid="connect-button">
+      <button
+        onClick={() => connect(logger, props.onPriceUpdate)}
+        data-testid="connect-button"
+      >
         Connect
       </button>
       <br />
