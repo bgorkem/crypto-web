@@ -1,17 +1,44 @@
 {
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
-    "ecmaVersion": 2018,
+    "ecmaVersion": 12,
     "sourceType": "module",
-    "project": "tsconfig.eslint.json"
+    "project": "tsconfig.eslint.json",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
+  "plugins": [
+    "react",
+    "@typescript-eslint",
+    "prettier"
+  ],
   "ignorePatterns": [
     "webpack.config.js"
   ],
   "extends": [
-    "plugin:@typescript-eslint/recommended"
+    "plugin:prettier/recommended",
+    "plugin:@typescript-eslint/recommended",
+    "plugin:react/recommended"
   ],
   "rules": {
-    "@typescript-eslint/explicit-module-boundary-types": 0
-  }
+    "no-unused-vars": "off",
+    "@typescript-eslint/explicit-module-boundary-types": 0,
+    "@typescript-eslint/no-unused-vars": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "overrides": [
+    {
+      "files": [
+        "src/**/*.test.tsx"
+      ],
+      "rules": {
+        "@typescript-eslint/no-empty-function": "off"
+      }
+    }
+  ]
 }

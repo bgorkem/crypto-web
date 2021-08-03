@@ -1,13 +1,13 @@
 import React from 'react';
-import { render, waitFor, cleanup } from '@testing-library/react';
+import { render, waitFor, cleanup, RenderResult } from '@testing-library/react';
 import '@testing-library/jest-dom/extend-expect';
 import SocketConsole from '../SocketConsole';
 
 describe('SocketConsole test', () => {
-  let component = null;
+  let component: RenderResult;
 
   beforeEach(async () => {
-    component = await render(<SocketConsole />);
+    component = await render(<SocketConsole onPriceUpdate={() => {}} />);
   });
 
   afterEach(() => {

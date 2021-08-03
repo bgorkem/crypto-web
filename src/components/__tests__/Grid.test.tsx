@@ -4,7 +4,7 @@ import { render } from '@testing-library/react';
 
 describe('Grid tests', () => {
   test('Grid is rendered', async () => {
-    const comp = await render(<Grid />);
+    const comp = await render(<Grid onGridApi={() => {}} />);
     const div = comp.getByTestId('grid');
     expect(div).not.toBeUndefined();
   });
