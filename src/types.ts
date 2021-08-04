@@ -5,3 +5,10 @@ export type PriceEntity = {
   price: number;
   price_timestamp: string;
 };
+
+export interface IConnect {
+  (
+    log: (message: string) => void,
+    onPriceUpdate: (prices: PriceEntity[]) => void
+  ): void;
+}

@@ -118,4 +118,4 @@ dist
 .pnp.*
 
 
-src/config.ts
+src/*Config.ts

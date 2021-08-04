@@ -1,5 +1,5 @@
 import React, { ReactElement, useState } from 'react';
-import { connect } from '../lib/socket';
+import { connect } from '../lib/finnHubSocket';
 import { PriceEntity } from '../types';
 
 type SocketConsoleProps = {

@@ -1,15 +1,12 @@
-import { PriceEntity } from '../types';
+import { IConnect, PriceEntity } from '../types';
 import { SessionEventCode, SolclientFactory } from 'solclientjs';
-import config from './config';
+import config from './solaceConfig';
 
 /**
  * Connects to Solace PubSub+ on Web, subscribes to prices topic
  * @param logger logging callback
  */
-export function connect(
-  log: (message: string) => void,
-  onPriceUpdate: (prices: PriceEntity[]) => void
-): void {
+export const connect: IConnect = (log, onPriceUpdate) => {
   SolclientFactory.init({});
   log('initialized');
 
@@ -37,4 +34,4 @@ export function connect(
   subscriber.on(SessionEventCode.SUBSCRIPTION_OK, function () {
     log('Subscription ok');
   });
-}
+};
