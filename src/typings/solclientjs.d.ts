@@ -4,6 +4,8 @@ declare module 'solclientjs' {
     /**connects to session with previously provided credentials and url */
     connect(): void;
 
+    disconnect(): void;
+
     /** on session connection is up */
     on(
       eventCode: SessionEventCode.UP_NOTICE,

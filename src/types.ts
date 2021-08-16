@@ -10,5 +10,5 @@ export interface IConnect {
   (
     log: (message: string) => void,
     onPriceUpdate: (prices: PriceEntity[]) => void
-  ): void;
+  ): () => void;
 }
