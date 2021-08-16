@@ -1,11 +1,12 @@
 import { webSocket, WebSocketSubject } from 'rxjs/webSocket';
-import { map, distinctUntilChanged, bufferTime } from 'rxjs/operators';
+import { map, distinctUntilChanged, bufferTime, first } from 'rxjs/operators';
 
 import finnHubConfig from './finnHubConfig';
 import { IConnect } from '../types';
+import { LoggerFactory } from 'ag-grid-community';
 
 type SendData = { type: string; symbol: string };
-type ReceiveData = {
+type TickData = {
   data: {
     p: number;
     s: string;
@@ -15,16 +16,13 @@ type ReceiveData = {
   type: string;
 };
 
-type SocketData = SendData | ReceiveData;
+type SocketData = SendData | TickData;
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-function isReceiveData(x: any): x is ReceiveData {
+function hasTickData(x: any): x is TickData {
   return x.data instanceof Object;
 }
-/**
- * Create an return a websocket subject where you can subscribe to a topic and observe incoming messages.
- * @returns WebSocket subject
- */
+
 export const createWebSocketSubject = () =>
   webSocket<SocketData>(`wss://ws.finnhub.io?token=${finnHubConfig.apiKey}`);
 
@@ -42,7 +40,9 @@ function createConnection(
   return {
     stream: wsSubject.pipe(
       bufferTime(1000),
-      map((arrays) => arrays.map((a) => (a as ReceiveData).data).flat(1)),
+      map((socketMessages) =>
+        socketMessages.map((a) => (a as TickData).data).flat(1)
+      ),
       distinctUntilChanged()
     ),
     close: () => wsSubject.complete(),
@@ -58,15 +58,26 @@ export const connect: IConnect = (log, onPriceUpdate) => {
     'BINANCE:ETHEUR',
   ]);
 
-  conn.stream.subscribe((values) => {
-    const priceEntities = values.map((value) => ({
-      id: value.s,
-      currency: value.s,
-      symbol: value.s,
-      price: value.p,
-      price_timestamp: value.t.toString(),
-    }));
+  // log the first time we get data..
+  conn.stream.pipe(first()).subscribe(() => log('connected'));
 
-    onPriceUpdate(priceEntities);
+  conn.stream.subscribe({
+    next: (values) => {
+      const priceEntities = values.map((value) => ({
+        id: value.s,
+        currency: value.s,
+        symbol: value.s,
+        price: value.p,
+        price_timestamp: value.t.toString(),
+      }));
+      onPriceUpdate(priceEntities);
+    },
+    error: (err) => log(`error :  ${JSON.stringify(err)}`),
+    complete: () => log('closed'),
   });
+
+  return () => {
+    log('disconnecting');
+    conn.close();
+  };
 };

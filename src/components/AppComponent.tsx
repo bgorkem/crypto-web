@@ -35,9 +35,13 @@ const AppComponent: AppComponentType = () => {
 
   return (
     <>
-      <SocketConsole onPriceUpdate={onPriceUpdate} />
+      <SocketConsole
+        onConnecting={() => gridApi && gridApi.showLoadingOverlay()}
+        onPriceUpdate={onPriceUpdate}
+      />
       <Grid
         onGridApi={(api: GridApi) => {
+          api.setRowData([]);
           setGridApi(api);
         }}
       />

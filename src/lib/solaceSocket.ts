@@ -10,20 +10,20 @@ export const connect: IConnect = (log, onPriceUpdate) => {
   SolclientFactory.init({});
   log('initialized');
 
-  const subscriber = SolclientFactory.createSession(config);
+  const session = SolclientFactory.createSession(config);
   try {
-    subscriber.connect();
+    session.connect();
   } catch (error) {
     log(error);
   }
 
-  subscriber.on(SessionEventCode.UP_NOTICE, function () {
+  session.on(SessionEventCode.UP_NOTICE, function () {
     log('connected, subscribing topic: T/Crypto/prices');
     const t = SolclientFactory.createTopicDestination('T/Crypto/prices');
-    subscriber.subscribe(t, true, 'T/Crypto/prices');
+    session.subscribe(t, true, 'T/Crypto/prices');
   });
 
-  subscriber.on(SessionEventCode.MESSAGE, function (message) {
+  session.on(SessionEventCode.MESSAGE, function (message) {
     const m = message.getSdtContainer().getValue() || '';
     const tick = JSON.parse(m);
     const { id, currency, symbol, price, price_timestamp } = tick;
@@ -31,7 +31,9 @@ export const connect: IConnect = (log, onPriceUpdate) => {
     log('Received message:' + m);
   });
 
-  subscriber.on(SessionEventCode.SUBSCRIPTION_OK, function () {
+  session.on(SessionEventCode.SUBSCRIPTION_OK, function () {
     log('Subscription ok');
   });
+
+  return session.disconnect;
 };
